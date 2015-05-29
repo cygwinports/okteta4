@@ -8,6 +8,7 @@ SUMMARY="KDE binary file editor"
 DESCRIPTION="Part of the KDE developer tools suite"
 
 PKG_NAMES="${NAME} ${NAME}-devel"
+okteta_REQUIRES="kde-runtime"
 okteta_CONTENTS="etc/ usr/bin/ usr/lib/kde4/ usr/share/"
 okteta_devel_REQUIRES="libkdecore-devel"
 okteta_devel_CONTENTS="usr/include/ usr/lib/lib*.dll.a"
