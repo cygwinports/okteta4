@@ -1,0 +1,74 @@
+ORIG_PN="okteta"
+inherit kde4
+
+NAME="okteta4"
+VERSION=4.14.3
+RELEASE=2
+CATEGORY="KDE"
+SUMMARY="KDE binary file editor plugin"
+DESCRIPTION="Part of the KDE developer tools suite"
+
+PKG_NAMES="${NAME}-part libkasten2_2 libkasten2-devel libokteta1_1 libokteta1-devel"
+okteta4_part_CONTENTS="
+	usr/lib/kde4/libkbytearrayedit.dll
+	usr/lib/kde4/oktetapart.dll
+	usr/share/doc/okteta4/
+	usr/share/kde4/apps/oktetapart/
+	usr/share/kde4/services/kbytearrayedit.desktop
+	usr/share/kde4/services/oktetapart.desktop
+"
+libkasten2_2_CATEGORY="Libs"
+libkasten2_2_SUMMARY="KDE Kasten framework"
+libkasten2_2_CONTENTS="
+	usr/bin/cygkasten2controllers-2.dll
+	usr/bin/cygkasten2core-2.dll
+	usr/bin/cygkasten2gui-2.dll
+"
+libokteta1_1_CATEGORY="Libs"
+libokteta1_1_SUMMARY=${SUMMARY/plugin/libraries}
+libokteta1_1_CONTENTS="
+	usr/bin/cygkasten2okteta1*-1.dll
+	usr/bin/cygokteta1*-1.dll
+	usr/share/kde4/apps/okteta/
+	usr/share/kde4/config.kcfg/structviewpreferences.kcfg
+	usr/share/kde4/config/okteta-structures.knsrc
+"
+libkasten2_devel_CATEGORY="Libs"
+libkasten2_devel_SUMMARY="KDE Kasten framework"
+libkasten2_devel_REQUIRES="libkdecore-devel"
+libkasten2_devel_CONTENTS="
+	usr/include/kde4/KDE/Kasten2/
+	usr/include/kde4/kasten2/
+	usr/lib/libkasten2controllers.dll.a
+	usr/lib/libkasten2core.dll.a
+	usr/lib/libkasten2gui.dll.a
+"
+libokteta1_devel_CATEGORY="Libs"
+libokteta1_devel_SUMMARY=${SUMMARY/plugin/libraries}
+libokteta1_devel_REQUIRES="libkasten2-devel"
+libokteta1_devel_OBSOLETES="okteta-devel"
+libokteta1_devel_CONTENTS="
+	usr/include/kde4/KDE/Okteta1/
+	usr/include/kde4/okteta1/
+	usr/lib/kde4/plugins/designer/oktetadesignerplugin.dll
+	usr/lib/libkasten2okteta1*.dll.a
+	usr/lib/libokteta1*.dll.a
+"
+
+src_compile() {
+	cd ${B}
+	kde4_cmake
+	for d in core gui libs designer kasten parts
+	do
+		cygmake -C $d
+	done
+}
+
+src_install() {
+	cd ${B}
+	for d in core gui libs designer kasten parts
+	do
+		kde4_install -C $d
+	done
+	rm -f ${D}/usr/bin/struct2osd.sh
+}
